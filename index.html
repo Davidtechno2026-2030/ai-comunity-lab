@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,12 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#101827">
   <title>AI Community Assistant</title>
-
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -19,41 +14,22 @@
       color: #f1f5f9;
       min-height: 100vh;
     }
-
     header {
       padding: 25px 20px;
       text-align: center;
       background: #172338;
       border-bottom: 1px solid #334155;
     }
-
-    header h1 {
-      margin: 0;
-      color: #67e8f9;
-      letter-spacing: 2px;
-    }
-
-    main {
-      width: min(900px, 92%);
-      margin: 35px auto;
-    }
-
-    .intro {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .intro h2 {
-      font-size: 28px;
-    }
-
+    header h1 { margin: 0; color: #67e8f9; letter-spacing: 2px; }
+    main { width: min(900px, 92%); margin: 35px auto; }
+    .intro { text-align: center; margin-bottom: 30px; }
+    .intro h2 { font-size: 28px; }
     .topics {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 15px;
       margin-bottom: 35px;
     }
-
     .topic {
       background: #1e293b;
       padding: 20px;
@@ -61,19 +37,13 @@
       text-align: center;
       border: 1px solid #334155;
     }
-
     .chat {
       background: #172338;
       border: 1px solid #334155;
       border-radius: 14px;
       padding: 20px;
     }
-
-    .chat h2 {
-      margin-top: 0;
-      color: #67e8f9;
-    }
-
+    .chat h2 { margin-top: 0; color: #67e8f9; }
     #messages {
       min-height: 130px;
       max-height: 300px;
@@ -83,28 +53,15 @@
       border-radius: 10px;
       margin-bottom: 15px;
     }
-
     .message {
       padding: 10px;
       margin: 8px 0;
       border-radius: 8px;
       overflow-wrap: anywhere;
     }
-
-    .user {
-      background: #164e63;
-      text-align: right;
-    }
-
-    .assistant {
-      background: #293548;
-    }
-
-    .input-area {
-      display: flex;
-      gap: 10px;
-    }
-
+    .user { background: #164e63; text-align: right; }
+    .assistant { background: #293548; }
+    .input-area { display: flex; gap: 10px; }
     input {
       flex: 1;
       min-width: 0;
@@ -115,7 +72,6 @@
       color: white;
       font-size: 16px;
     }
-
     button {
       padding: 13px 18px;
       border: 0;
@@ -125,79 +81,55 @@
       font-weight: bold;
       cursor: pointer;
     }
-
-    button:hover {
-      background: #0e7490;
-    }
-
+    button:hover { background: #0e7490; }
+    button:disabled { opacity: 0.6; cursor: wait; }
     footer {
       text-align: center;
       padding: 25px;
       color: #94a3b8;
     }
-
     @media (max-width: 500px) {
-      .input-area {
-        flex-direction: column;
-      }
+      .input-area { flex-direction: column; }
     }
   </style>
 </head>
-
 <body>
-
-  <header>
-    <h1>AI COMMUNITY LAB</h1>
-  </header>
-
+  <header><h1>AI COMMUNITY LAB</h1></header>
   <main>
     <section class="intro">
       <h2>AI Community Assistant</h2>
       <p>Tu punto de partida para aprender programación,
       inteligencia artificial y nuevas tecnologías.</p>
     </section>
-
     <section class="topics">
       <div class="topic">🤖 Inteligencia artificial</div>
       <div class="topic">💻 Programación</div>
       <div class="topic">🧠 Modelos de IA</div>
       <div class="topic">🚀 Desarrollo de proyectos</div>
     </section>
-
     <section class="chat">
       <h2>Asistente de aprendizaje</h2>
-
       <div id="messages" aria-live="polite">
         <div class="message assistant">
-          ¡Bienvenido! Puedes escribir una pregunta de prueba.
-          Esta versión todavía no está conectada a una IA real.
+          ¡Bienvenido! Ya puedes probar la conexión con el backend.
         </div>
       </div>
-
       <div class="input-area">
-        <input
-          id="userInput"
-          type="text"
-          placeholder="Escribe tu pregunta..."
-          aria-label="Tu pregunta"
-        >
+        <input id="userInput" type="text"
+          placeholder="Escribe tu pregunta..." aria-label="Tu pregunta">
         <button id="sendButton" type="button">Enviar</button>
       </div>
     </section>
   </main>
-
-  <footer>
-    AI Community Lab · Proyecto 01 · Versión 0.2
-  </footer>
+  <footer>AI Community Lab · Proyecto 01 · Versión 0.3</footer>
 
   <script>
     const input = document.getElementById("userInput");
     const messages = document.getElementById("messages");
     const button = document.getElementById("sendButton");
 
-    function sendMessage() {
+    async function sendMessage() {
       const question = input.value.trim();
-
       if (!question) return;
 
       const userMessage = document.createElement("div");
@@ -205,26 +137,42 @@
       userMessage.textContent = question;
       messages.appendChild(userMessage);
 
+      input.value = "";
+      button.disabled = true;
+
       const reply = document.createElement("div");
       reply.className = "message assistant";
-      reply.textContent =
-        "He recibido tu mensaje. Esta es una demostración: todavía no estoy conectado a un modelo de IA.";
-
+      reply.textContent = "Procesando mensaje...";
       messages.appendChild(reply);
 
-      input.value = "";
-      messages.scrollTop = messages.scrollHeight;
-      input.focus();
+      try {
+        const response = await fetch(
+          "/chat",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: question })
+          }
+        );
+
+        if (!response.ok) throw new Error("Error del servidor");
+
+        const data = await response.json();
+        reply.textContent = data.response;
+      } catch (error) {
+        reply.textContent =
+          "No se pudo conectar. Comprueba que el backend está activo y que el puerto es accesible.";
+      } finally {
+        button.disabled = false;
+        messages.scrollTop = messages.scrollHeight;
+        input.focus();
+      }
     }
 
     button.addEventListener("click", sendMessage);
-
-    input.addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        sendMessage();
-      }
+    input.addEventListener("keydown", event => {
+      if (event.key === "Enter") sendMessage();
     });
   </script>
-
 </body>
 </html>
